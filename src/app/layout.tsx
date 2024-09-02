@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Sidebar from "@/components/sidebar/sidebar";
+import { AuthProvider } from "./context/authContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,8 +21,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+      <AuthProvider>
       <ToastContainer />
-        {children}</body>
+      <div className='grid grid-cols-12 gap-4 p-10 h-screen '>
+            <div className='col-span-3 h-full'>
+              <Sidebar/>
+            </div>
+            <div className='col-span-9 h-full p-5'>
+            {children}
+            </div>
+        </div>
+        </AuthProvider>        
+        </body>
     </html>
   );
 }
