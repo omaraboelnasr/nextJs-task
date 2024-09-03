@@ -17,7 +17,7 @@ const Login = () => {
     const handleShowPassword=()=>{
         setShowPassword(!showPassword)
     }
-    const onSubmit = async (data) => {
+    const onSubmit = async (data:any) => {
         try {
             const response = await axios.post('https://cyparta-backend-gf7qm.ondigitalocean.app/api/login/', data)
             localStorage.setItem("token", response.data.access)
@@ -25,7 +25,7 @@ const Login = () => {
             toast.success("login success")
             router.push('/dashboard')
             console.log(response);
-        } catch (error) {
+        } catch (error:any) {
             toast.error(error?.message)
             console.log(error);
         }
@@ -59,7 +59,7 @@ const Login = () => {
                                         {...register('email', { required: 'Email is required' })}
                                         className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6"
                                     />
-                                    {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+                                    {errors.email && <p className="text-red-500">{errors.email.message as React.ReactNode}</p>}
                                 </div>
                             </div>
 
@@ -78,7 +78,7 @@ const Login = () => {
                                     <span onClick={handleShowPassword}>{showPassword?<FaRegEye className='text-gray-500' />:<FaRegEyeSlash className='text-gray-500' />}</span>
                                     </div>
                                 </div>
-                                {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+                                {errors.password && <p className="text-red-500">{errors.password.message as React.ReactNode}</p>}
                             </div>
                             <button type="submit" className="w-full mt-16 bg-black text-white py-2 px-4 rounded-md">Login</button>
                         </form>

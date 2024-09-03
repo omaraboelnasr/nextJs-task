@@ -17,7 +17,7 @@ import Image from 'next/image';
 
 
 const Profile = () => {
-    const [userProfile, setUserProfile] = useState({})
+    const [userProfile, setUserProfile] = useState<any>({})
     const [open, setOpen] = useState(false)
     const { register, handleSubmit, setValue, reset, watch, control, formState: { errors } } = useForm();
     const getProfile = async () => {
@@ -31,13 +31,13 @@ const Profile = () => {
             });
             setUserProfile(response.data)
             console.log(response.data);
-        } catch (error) {
+        } catch (error:any) {
             toast.error(error?.message)
             console.log(error);
         }
     }
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data:any) => {
         const token = localStorage.getItem('token');
         if (!token) {
             throw new Error("No token found");
@@ -48,7 +48,7 @@ const Profile = () => {
             })
             getProfile()
             toast.success("update success")
-        } catch (error) {
+        } catch (error:any) {
             toast.error(error?.message)
         }
     };
@@ -265,7 +265,7 @@ const Profile = () => {
                                                             {...register('first_name')}
                                                             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6"
                                                         />
-                                                        {errors.first_name && <p className="text-red-500">{errors.first_name.message}</p>}
+                                                        {errors.first_name && <p className="text-red-500">{errors.first_name.message as React.ReactNode }</p>}
                                                     </div>
                                                 </div>
                                                 <div>
@@ -279,7 +279,7 @@ const Profile = () => {
                                                             {...register('last_name')}
                                                             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6"
                                                         />
-                                                        {errors.last_name && <p className="text-red-500">{errors.last_name.message}</p>}
+                                                        {errors.last_name && <p className="text-red-500">{errors.last_name.message as React.ReactNode}</p>}
                                                     </div>
                                                 </div>
                                                 <div>
@@ -293,7 +293,7 @@ const Profile = () => {
                                                             {...register('bio')}
                                                             className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6"
                                                         />
-                                                        {errors.bio && <p className="text-red-500">{errors.bio.message}</p>}
+                                                        {errors.bio && <p className="text-red-500">{errors.bio.message as React.ReactNode}</p>}
                                                     </div>
                                                 </div>
                                                 <div className=" px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
