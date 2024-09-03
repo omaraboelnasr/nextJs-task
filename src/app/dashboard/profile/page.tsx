@@ -11,10 +11,14 @@ import { RiShoppingBag4Line } from "react-icons/ri";
 import { CiEdit } from "react-icons/ci";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaRegBell } from "react-icons/fa";
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+import { useForm } from 'react-hook-form';
 
 
 const Profile = () => {
     const [userProfile, setUserProfile] = useState({})
+    const [open, setOpen] = useState(false)
+    const { register, handleSubmit, setValue, reset, watch, control, formState: { errors } } = useForm();
     const getProfile = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -31,6 +35,31 @@ const Profile = () => {
             console.log(error);
         }
     }
+
+    const onSubmit = async (data) => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            throw new Error("No token found");
+        }
+        try {
+            const response = await axios.patch('https://cyparta-backend-gf7qm.ondigitalocean.app/api/profile/', data, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            getProfile()
+            toast.success("update success")
+        } catch (error) {
+            toast.error(error?.message)
+        }
+    };
+
+    const handleUpdate = ()=>{
+        setOpen(!open)
+        if(userProfile){
+            setValue('first_name', userProfile.first_name)
+            setValue('last_name', userProfile.last_name)
+            setValue('bio', userProfile.bio)
+        }
+    }
     useEffect(() => {
         getProfile()
 
@@ -38,14 +67,14 @@ const Profile = () => {
     return (
         <>
             <div className='flex justify-end w-11/12'>
-            <div className='me-5 p-3 rounded-md self-center bg-gray-100'>
-            <FaRegBell />
-            </div>
-            
-            <img src={userProfile?.image} alt="" width={60} height={60} className='rounded-full' />
+                <div className='me-5 p-3 rounded-md self-center bg-gray-100'>
+                    <FaRegBell />
+                </div>
+
+                <img src={userProfile?.image} alt="" width={60} height={60} className='rounded-full' />
             </div>
             <div className='mb-2'>
-            <p className='flex font-semibold'>Employees<span><IoIosArrowForward className='w-4 h-4 mt-1 mr-1 ml-1' /></span>Profile</p>
+                <p className='flex font-semibold'>Employees<span><IoIosArrowForward className='w-4 h-4 mt-1 mr-1 ml-1' /></span>Profile</p>
             </div>
             <div className='flex justify-between items-start w-5/6'>
                 <div>
@@ -65,8 +94,8 @@ const Profile = () => {
                     </div>
                 </div>
                 <div className='self-end me-10'>
-                    <button type="submit" className="flex bg-black text-white py-2 px-4 rounded-md">
-                    <CiEdit className='w-5 h-5 mr-2'/> Edit Profile
+                    <button onClick={() => handleUpdate()} className="flex bg-black text-white py-2 px-4 rounded-md">
+                        <CiEdit className='w-5 h-5 mr-2' /> Edit Profile
                     </button>
                 </div>
             </div>
@@ -205,6 +234,95 @@ const Profile = () => {
                 </div>
             </div>
 
+            <Dialog open={open} onClose={setOpen} className="relative z-10">
+                <DialogBackdrop
+                    transition
+                    className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+                />
+
+                <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+                    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                        <DialogPanel
+                            transition
+                            className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
+                        >
+                            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                                <div className="sm:flex sm:items-start">
+                                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                        <DialogTitle as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                                            Update profile
+                                        </DialogTitle>
+                                        <div className="mt-2">
+                                            <form onSubmit={handleSubmit(onSubmit)}>
+                                                <div>
+                                                    <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        First Name
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <input
+                                                            id="firstName"
+                                                            type="text"
+                                                            {...register('first_name')}
+                                                            className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6"
+                                                        />
+                                                        {errors.first_name && <p className="text-red-500">{errors.first_name.message}</p>}
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="lastName" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Last Name
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <input
+                                                            id="lastName"
+                                                            type="text"
+                                                            {...register('last_name')}
+                                                            className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6"
+                                                        />
+                                                        {errors.last_name && <p className="text-red-500">{errors.last_name.message}</p>}
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label htmlFor="bio" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Bio
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <input
+                                                            id="bio"
+                                                            type="text"
+                                                            {...register('bio')}
+                                                            className="block w-full rounded-md border-0 p-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset  sm:text-sm sm:leading-6"
+                                                        />
+                                                        {errors.bio && <p className="text-red-500">{errors.bio.message}</p>}
+                                                    </div>
+                                                </div>
+                                                <div className=" px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                                                    <button
+                                                        type="submit"
+                                                        onClick={() => setOpen(false)}
+                                                        className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                                                    >
+                                                        Update
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        data-autofocus
+                                                        onClick={() => setOpen(false)}
+                                                        className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </DialogPanel>
+                    </div>
+                </div>
+            </Dialog>
 
         </>
     );
