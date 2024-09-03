@@ -8,7 +8,7 @@ interface AuthContextType {
   
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }:any) => {
     const [auth, setAuth] = useState(false);
 
     useEffect(() => {
