@@ -13,6 +13,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { FaRegBell } from "react-icons/fa";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useForm } from 'react-hook-form';
+import Image from 'next/image';
 
 
 const Profile = () => {
@@ -70,8 +71,7 @@ const Profile = () => {
                 <div className='me-5 p-3 rounded-md self-center bg-gray-100'>
                     <FaRegBell />
                 </div>
-
-                <img src={userProfile?.image} alt="" width={60} height={60} className='rounded-full' />
+                <Image src={userProfile?.image} alt="description" width={60} height={60} className='rounded-full' />
             </div>
             <div className='mb-2'>
                 <p className='flex font-semibold'>Employees<span><IoIosArrowForward className='w-4 h-4 mt-1 mr-1 ml-1' /></span>Profile</p>
@@ -79,7 +79,7 @@ const Profile = () => {
             <div className='flex justify-between items-start w-5/6'>
                 <div>
                     <div className='flex'>
-                        <img src={userProfile?.image} alt="" width={100} height={100} />
+                    <Image src={userProfile?.image} alt="description" width={100} height={100} />
                         <div className='ms-5'>
                             <h3 className='font-bold mb-2'>{userProfile?.name}</h3>
                             <div className='flex items-center'>
@@ -213,7 +213,7 @@ const Profile = () => {
 
                     <div className="grid grid-cols-3 gap-4">
                         <div>
-                            <p className="block text-gray-700 mb-1">Work's hours</p>
+                            <p className="block text-gray-700 mb-1">{`Work's hours`}</p>
                             <div className="w-full border-b border-gray-300">
                                 <p>180 hour</p>
                             </div>
